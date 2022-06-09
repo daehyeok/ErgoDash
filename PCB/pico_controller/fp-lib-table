@@ -1,0 +1,5 @@
+(fp_lib_table
+  (lib (name "RPi_Pico")(type "KiCad")(uri "${KIPRJMOD}/KiCad-RP-Pico/RP-Pico Libraries/MCU_RaspberryPi_and_Boards.pretty")(options "")(descr ""))
+  (lib (name "ergodash_controller")(type "KiCad")(uri "${KIPRJMOD}/ergodash.pretty")(options "")(descr ""))
+  (lib (name "ergo_common")(type "KiCad")(uri "/Users/daehyeok/workspace/ErgoDash/PCB/ergodash_2040.pretty")(options "")(descr ""))
+)

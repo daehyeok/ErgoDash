@@ -1,3 +1,6 @@
+*gerber.zip
+PCB/*/*_gerber/
+
 # Created by https://www.toptal.com/developers/gitignore/api/macos,emacs,kicad,python
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,emacs,kicad,python
 
