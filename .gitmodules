@@ -1,0 +1,3 @@
+[submodule "PCB/pico_controller/KiCad-RP-Pico"]
+	path = PCB/pico_controller/KiCad-RP-Pico
+	url = https://github.com/ncarandini/KiCad-RP-Pico
