@@ -5,16 +5,18 @@ def footpintDict(prefix):
     return {f.GetReference(): f for f in b.Footprints() if f.GetReference().startswith(prefix)}
     
 
+
+def footpintList(prefix):
+    b = pcbnew.GetBoard()
+    l= [f for f in b.Footprints() if f.GetReference().startswith(prefix)]
+    l.sort( key = lambda x:x.GetReference())
+    return l
+
+
 def ledalign():
-    wses = footpintDict('WS')
-    swes = footpintDict('SW')
-    for k in wses.keys(): 
-        n = k[2:]
-        sw_key = 'SW' + n
-        if sw_key not in swes:
-            continue
-        sw= swes[sw_key]
-        ws = wses[k]
+    wses = footpintList('LED')
+    swes = footpintList('SW')
+    for ws, sw in zip(wses, swes):
         cur_pos = ws.GetPosition()
         ws.Move(pcbnew.wxPoint(cur_pos.x * -1, cur_pos.y * -1, ))
         ws.Move(sw.GetPosition())
