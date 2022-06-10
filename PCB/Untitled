@@ -1,0 +1,21 @@
+import pcbnew
+
+def footpintDict(prefix):
+    b = pcbnew.GetBoard()
+    return {f.GetReference(): f for f in b.Footprints() if f.GetReference().startswith(prefix)}
+    
+
+def ledalign():
+    wses = footpintDict('WS')
+    swes = footpintDict('SW')
+    for k in wses.keys(): 
+        n = k[2:]
+        sw_key = 'SW' + n
+        if sw_key not in swes:
+            continue
+        sw= swes[sw_key]
+        ws = wses[k]
+        cur_pos = ws.GetPosition()
+        ws.Move(pcbnew.wxPoint(cur_pos.x * -1, cur_pos.y * -1, ))
+        ws.Move(sw.GetPosition())
+    pcbnew.Refresh()
