@@ -12,12 +12,42 @@ def footpintList(prefix):
     l.sort( key = lambda x:x.GetReference())
     return l
 
+def alignDiode(offset):
+    ds = footpintDict('D')
+    swes = footpintDict('SW')
+    for i in range(35):
+        d = ds[f"D{i}"]
+        sw = sweds[f"SW{i}"]
+        cur_pos = d.GetPosition()
+        d.Move(pcbnew.wxPoint(cur_pos.x * -1, cur_pos.y * -1 + offset * 1000000))
+        d.Move(sw.GetPosition() )
+    pcbnew.Refresh()
 
 def ledalign():
     wses = footpintList('LED')
     swes = footpintList('SW')
     for ws, sw in zip(wses, swes):
         cur_pos = ws.GetPosition()
-        ws.Move(pcbnew.wxPoint(cur_pos.x * -1, cur_pos.y * -1, ))
+        ws.Move(pcbnew.wxPoint(cur_pos.x * -1, cur_pos.y * -1 ))
         ws.Move(sw.GetPosition())
     pcbnew.Refresh()
+
+def locate(d,pos):
+    cur_pos = d.GetPosition()
+    d.Move(pcbnew.wxPoint(cur_pos.x * -1, cur_pos.y * -1 ))
+    d.Move(pos)
+
+def alignHole():
+    hs = footpintList('H')
+    pos = [ (134620000, 81788000),
+     (191770000, 65024000),
+     (185801000, 124714000),
+     (96520000, 67564000),
+     (96520000, 124968000),
+     (135128000, 117348000),
+     (128397000, 42672000)]
+    for h, p in zip(hs,pos):
+        locate(h, pcbnew.wxPoint(p[0], p[1]))
+    pcbnew.Refresh()
+    
+      
