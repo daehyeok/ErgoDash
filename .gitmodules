@@ -4,3 +4,6 @@
 [submodule "PCB/main/marbastlib"]
 	path = PCB/main/marbastlib
 	url = https://github.com/ebastler/marbastlib.git
+[submodule "Case/BOSL2"]
+	path = Case/BOSL2
+	url = https://github.com/revarbat/BOSL2
