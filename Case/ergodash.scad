@@ -1,5 +1,7 @@
-
-module switches(){
+include <BOSL2/std.scad>
+include <BOSL2/shapes2d.scad>;
+$fn=100;
+module switches(w=19.05,h=19.05){
     positions =[
         [0.0, 76.2, 0.0],
         [38.1, 61.9125, 0.0],
@@ -21,48 +23,78 @@ module switches(){
         [114.3, 69.05625, 0.0],
         [114.3, 50.00625, 0.0],
         [114.3, 30.95625, 0.0],
-        [113.32, 6.9732, 0.0],
+        [113.32, 6.9732, -30.0],
         [0.0, 38.1, 0.0],
         [0.0, -0.0, 0.0],
         [19.05, -0.0, 0.0],
         [38.1, 4.7625, 0.0],
-        [87.297, 0.00025, 0.0],
-        [103.795, -9.5248, 0.0],
-        [60.96, 4.7625, 0.0],
+        [87.297, 0.00025, -30.0],
+        [103.795, -9.5248, -30.0],
+        [60.96, 4.7625, 0.0], //1.25u
         [0.0, 19.05, 0.0],
-        [125.0555, -10.8008, 0.0]];
+        [125.0555, -10.8008, -120.0], //2u
+        [19.05, 76.2, 0.0],
+        [19.05, 57.15, 0.0],
+        [19.05, 38.1, 0.0],
+        [19.05, 19.05, 0.0],
+        [38.1, 80.9625, 0.0],];
 
+    for(pos = positions)
+        translate([pos[0], pos[1]])
+        square([w,h], spin=pos[2], center=true);
 }
 
 module pcbHoles(r=2.5){
  positions = [[47.705, 54.4155],
-[86.565, 69.4055],
-[98.806, 9.4615],
-[9.525, 66.6115],
-[9.525, 9.2075],
-[48.133, 16.8275]];
-    for (pos = positions) 
-        translate(pos)
-            circle(r);
+                [86.565, 69.4055],
+                [98.806, 9.4615],
+                [9.525, 66.6115],
+                [9.525, 9.2075],
+                [48.133, 16.8275]];
+                for (pos = positions) 
+                        translate(pos)
+                            circle(r);
 }
 
 module pcbOutline(){
     color([0,1,0])
-    import (file = "ergodash-Edge_Cuts.svg");
+    difference(){
+        import (file = "ergodash-Edge_Cuts.dxf");
+        pcbHoles();
+    }
 }
 
-module plateOutline(){
-     color([1,0,0])
-    import (file = "plate.svg");
+
+module plateHoles(){
+   pcbHoles(r=2.5);
 }
 
-module caseOutline(){
-     color([0,0,1])
+
+module plate(height=1.6){
+    difference(){
+        import (file = "outline.dxf");
+        pcbHoles();
+        switches(14,14);
+    }
+}
+
+
+module caseBaseOutline(){
     import (file = "outline.svg");
 }
 
 
-pcbOutline();
-plateOutline();
-caseOutline();
-pcbHoles();
+module caseBase(){
+    import (file = "outline.dxf");
+}
+
+
+module bottom(){
+    import (file = "outline.dxf");
+}
+
+module top(){
+    caseOutlineBase();
+}
+
+plate();
