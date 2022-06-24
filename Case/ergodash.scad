@@ -5,12 +5,17 @@ $fn=100;
 plate_thick=3;
 _middle_bottom_thick=5;
 _middle_top_thick=5;
-middle_thick=_middle_bottom_thick + _middle_top_thick;
+middle_thick= 9;
 bottom_thick=3;
 top_wall_thick=3;
 top_thick=3;
 
 outline_size = [152.393,130.852];
+//https://katofastening.com/inserts/specs.html
+m2dot_margin=1.2*2;
+m2dot5_outer=3.70 + m2dot_margin;
+m2_drill=2;
+m2_heil_coil_drill=2.1;
 
 key_positions =[
     //x,y,degree, size
@@ -77,22 +82,41 @@ module pcbOutline(){
      import (file = "ergodash-Edge_Cuts.dxf");
 }
 
-module pcb(height=1.6){
+module pcb(thick=1.6, stack_height=0){
+    up(stack_height)
     color("green")
     difference(){
-        linear_extrude(height = height)
+        linear_extrude(height = thick)
         pcbOutline();
         pcbHoles();
     }
 }
 
-//mount holes for bottom,(plate), top)
+//mount holes for bottom, 
 module plateMounts(r=3){
-     positions =[
-        [34.0, -7.0],
-        [74.5, -7.0],
+    /* positions =[
+        [-12,-9],
+        [34.0, -8.5],
+        [74.5, -8.5],
+        [-8, 88],
         [43, 94],
         [80.5, 94.5],
+        [123, 82],
+    ];
+    */
+    positions =[
+        [-11.5,-9.5],
+        [-11.5, 48.25-9.5],
+        [-11.5, 87],
+        [34.0, -8.5],
+        [74.5, -8.5],
+        
+        [30, 95],
+        [85, 97],
+        [120, 84],
+        [128.5, 14],
+        [143.8, -3],
+        [128.2, -30],
     ];
     color([1,0,0])
    for(pos = positions)
@@ -100,7 +124,7 @@ module plateMounts(r=3){
          circle(r);
 }
 
-module caseOutline(scale=1){
+module baseOutline(scale=1){
     delta= [-outline_size[0]/2 + 9.756,
     outline_size[1]/2 -197.903/2 ];
     translate(-delta) 
@@ -110,35 +134,65 @@ module caseOutline(scale=1){
     //152.393,130.852
 }
 
-
-module plateOutline(){
-     caseOutline();
+module caseOutline(){
+    baseOutline(1.065);
 }
+
+module plateOutline(include_hole=false){
+   difference(){
+   caseOutline();
+       
+   if(include_hole ==true){
+    union(){
+       //pcbHoles(r=1.1);
+       switches(14,14);
+       plateMounts(m2_drill/2);
+      }
+   }
+   };
+}
+
 module plate(thick=plate_thick, 
             stack_height=0){
     up(stack_height)
     linear_extrude(height = thick)
-    difference(){
-     plateOutline();
-      pcbHoles(r=1.1);
-      switches(14,14);
-   }
+    plateOutline(include_hole=true);
 }
 
 module bottom(thick=bottom_thick){
     color("purple")
     linear_extrude(height = thick)
-    caseOutline(1.05);
+    caseOutline();
 }
+
+
+module trrsCutter(thick=middle_thick, stack_height=0){
+    up(stack_height)
+    linear_extrude(height = thick)
+    trrsCutterOutline();
+}
+
+module trrsCutterOutline(){
+    back(87)
+    right(105)
+    square([25,14], true);
+}
+
+module middleOutline(){
+       difference(){
+        caseOutline();
+           scale(1.01)
+        pcbOutline();  //TODO: add margin for pcb
+        plateMounts(m2_heil_coil_drill/2);
+        trrsCutterOutline();
+    };
+};
 
 module middle(thick=middle_thick, stack_height=0){
     up(stack_height)
     color("red")
     linear_extrude(height = thick)
-    difference(){
-        caseOutline(1.05);
-        pcbOutline();  //TODO: add margin for pcb
-    };
+    middleOutline();
 }
 
 module topWall(thick=top_wall_thick, stack_height=0){
@@ -146,7 +200,7 @@ module topWall(thick=top_wall_thick, stack_height=0){
      color("green")
     linear_extrude(height = thick)
     difference(){
-        caseOutline(1.05);
+        caseOutline();
         plateOutline();  //TODO: add margin for plate
     };
 }
@@ -172,7 +226,7 @@ module topCase(thick=top_thick, stack_height=0){
     color("white")
     linear_extrude(height = thick)
     difference(){
-     caseOutline(1.05);
+     caseOutline();
       pcbHoles(r=1.1);
         switch_cutter();
    }
@@ -180,13 +234,16 @@ module topCase(thick=top_thick, stack_height=0){
 
 
 module Rendering(){
-    topCase(stack_height=bottom_thick
-            +middle_thick
-            +top_wall_thick);
-    topWall(stack_height=bottom_thick +middle_thick);
-    plate(stack_height=bottom_thick+middle_thick);
+    //topCase(stack_height=bottom_thick + middle_thick + top_wall_thick);
+    //topWall(stack_height=bottom_thick +middle_thick);
+  // plate(stack_height=bottom_thick+middle_thick);
+
+    pcb(stack_height=bottom_thick+middle_thick-5);
+    trrsCutter(stack_height=bottom_thick);
     middle(stack_height=bottom_thick);
     bottom(bottom_thick);
 }
 
+//plateOutline(true);
+//plateMounts(true);
 Rendering();
