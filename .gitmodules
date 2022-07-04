@@ -7,3 +7,6 @@
 [submodule "Case/BOSL2"]
 	path = Case/BOSL2
 	url = https://github.com/revarbat/BOSL2
+[submodule "firmware/kmk_firmware"]
+	path = firmware/kmk_firmware
+	url = https://github.com/KMKfw/kmk_firmware
