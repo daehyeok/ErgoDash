@@ -45,7 +45,7 @@
         "silk_text_upright": false,
         "zones": {
           "45_degree_only": false,
-          "min_clearance": 0.127
+          "min_clearance": 0.254
         }
       },
       "diff_pair_dimensions": [
@@ -85,7 +85,7 @@
         "padstack": "error",
         "pth_inside_courtyard": "ignore",
         "shorting_items": "error",
-        "silk_over_copper": "ignore",
+        "silk_over_copper": "warning",
         "silk_overlap": "warning",
         "skew_out_of_range": "error",
         "through_hole_pad_without_hole": "error",
@@ -353,7 +353,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "microusb.kicad_pro",
+    "filename": "ioparts.kicad_pro",
     "version": 1
   },
   "net_settings": {
@@ -385,12 +385,7 @@
         "microvia_diameter": 0.3,
         "microvia_drill": 0.1,
         "name": "Comms",
-        "nets": [
-          "DM_MICRO",
-          "DP_MICRO",
-          "GND1",
-          "unconnected-(J1-Pad4)"
-        ],
+        "nets": [],
         "pcb_color": "rgba(0, 0, 0, 0.000)",
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.25,
@@ -426,7 +421,9 @@
         "microvia_diameter": 0.9,
         "microvia_drill": 0.6,
         "name": "Power 3A",
-        "nets": [],
+        "nets": [
+          "VBUS_C"
+        ],
         "pcb_color": "rgba(0, 0, 0, 0.000)",
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.55,

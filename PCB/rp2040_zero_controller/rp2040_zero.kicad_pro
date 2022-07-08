@@ -33,9 +33,9 @@
         "other_text_thickness": 0.15,
         "other_text_upright": false,
         "pads": {
-          "drill": 0.762,
-          "height": 1.524,
-          "width": 1.524
+          "drill": 2.2,
+          "height": 2.2,
+          "width": 2.2
         },
         "silk_line_width": 0.15239999999999998,
         "silk_text_italic": false,
@@ -45,7 +45,7 @@
         "silk_text_upright": false,
         "zones": {
           "45_degree_only": false,
-          "min_clearance": 0.5
+          "min_clearance": 0.254
         }
       },
       "diff_pair_dimensions": [
@@ -353,7 +353,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "ioparts.kicad_pro",
+    "filename": "rp2040_zero.kicad_pro",
     "version": 1
   },
   "net_settings": {
@@ -385,17 +385,7 @@
         "microvia_diameter": 0.3,
         "microvia_drill": 0.1,
         "name": "Comms",
-        "nets": [
-          "DM_C",
-          "DM_MICRO",
-          "DP_C",
-          "DP_MICRO",
-          "GND",
-          "GND1",
-          "Net-(J2-PadA5)",
-          "Net-(J2-PadB5)",
-          "unconnected-(J1-Pad4)"
-        ],
+        "nets": [],
         "pcb_color": "rgba(0, 0, 0, 0.000)",
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.25,
@@ -413,7 +403,9 @@
         "microvia_diameter": 0.6,
         "microvia_drill": 0.4,
         "name": "Power 1.5A",
-        "nets": [],
+        "nets": [
+          "+3V3"
+        ],
         "pcb_color": "rgba(0, 0, 0, 0.000)",
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.4,
@@ -432,10 +424,7 @@
         "microvia_drill": 0.6,
         "name": "Power 3A",
         "nets": [
-          "VBUS_C",
-          "VBUS_MICRO",
-          "VBUS_TRRS",
-          "VBUS_TRRS_B"
+          "VCC"
         ],
         "pcb_color": "rgba(0, 0, 0, 0.000)",
         "schematic_color": "rgba(0, 0, 0, 0.000)",
@@ -537,7 +526,7 @@
   },
   "sheets": [
     [
-      "8dbbe9e0-0cfe-4196-af6c-030c313835fc",
+      "2c105ff8-1e67-40c4-8c88-1b1c6098b9a7",
       ""
     ]
   ],
