@@ -426,7 +426,9 @@
         "microvia_diameter": 0.9,
         "microvia_drill": 0.6,
         "name": "Power 3A",
-        "nets": [],
+        "nets": [
+          "VBUS"
+        ],
         "pcb_color": "rgba(0, 0, 0, 0.000)",
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.55,
