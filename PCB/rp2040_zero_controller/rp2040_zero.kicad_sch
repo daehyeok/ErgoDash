@@ -1007,7 +1007,7 @@
     (uuid 0d38d324-03a5-4b0b-9014-dff533b56cd1)
     (property "Reference" "J4" (id 0) (at 193.04 53.34 0))
     (property "Value" "Conn_01x12" (id 1) (at 193.04 55.88 0))
-    (property "Footprint" "Connector_FFC-FPC:Molex_200528-0120_1x12-1MP_P1.00mm_Horizontal" (id 2) (at 193.04 72.39 0)
+    (property "Footprint" "ergodash_controller:CF50121D0R0-10-NH" (id 2) (at 193.04 72.39 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (id 3) (at 193.04 72.39 0)
@@ -1481,7 +1481,7 @@
       (reference "J3") (unit 1) (value "Conn_01x04") (footprint "Connector_JST:JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal")
     )
     (path "/0d38d324-03a5-4b0b-9014-dff533b56cd1"
-      (reference "J4") (unit 1) (value "Conn_01x12") (footprint "Connector_FFC-FPC:Molex_200528-0120_1x12-1MP_P1.00mm_Horizontal")
+      (reference "J4") (unit 1) (value "Conn_01x12") (footprint "ergodash_controller:CF50121D0R0-10-NH")
     )
     (path "/13c35b16-c113-41c3-811d-ca2cd7617f5a"
       (reference "J5") (unit 1) (value "Conn_01x04") (footprint "Connector_JST:JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal")
