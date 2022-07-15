@@ -12,7 +12,7 @@ from kmk.modules.split import SplitSide
 
 from ergodash.ergodash import Ergodash
 
-ergodash = Ergodash()
+ergodash = Ergodash(SplitSide.RIGHT)
 
 if __name__ == "__main__":
     try:
