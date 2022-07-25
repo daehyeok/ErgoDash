@@ -13,8 +13,20 @@ from ergodash.pins import Pinconfig
 
 from kmk.modules.split import Split, SplitSide, SplitType
 from kmk.modules.tapdance import TapDance
+from kmk.handlers.sequences import simple_key_sequence
+from kmk.modules.oneshot import OneShot
+from kmk.modules.layers import Layers
 
-tapdance = TapDance()
+
+extra_modules=[
+    Layers(),
+    OneShot(),
+    TapDance()]
+
+launcher = simple_key_sequence(
+    (KC.OS(KC.LGUI, tap_time=None),  KC.SPC)
+)
+
 
 _______ = KC.TRNS
 esc_td = KC.TD(
@@ -25,11 +37,20 @@ esc_td = KC.TD(
 Keymap = [
     [
         # 0         1         2        3         4       5         6          7        8          9         10       11       12        13
-        esc_td,   KC.N1,    KC.N2,   KC.N3,   KC.N4,    KC.N5,    KC.MINS,  KC.EQL,   KC.N6,    KC.N7,    KC.N8,    KC.N9,    KC.N0,  KC.BKDL,
-        KC.TAB,   KC.Q,     KC.W,    KC.E,    KC.R,     KC.T,     KC.LBRC,  KC.RBRC,  KC.Y,      KC.U,     KC.I,     KC.O,      KC.P,   KC.BSLS,
-        KC.LCTRL, KC.A,     KC.S,    KC.D,    KC.F,     KC.G,     _______,  _______,  KC.H,      KC.J,     KC.K,     KC.L,     KC.SCLN, KC.QUOT,
-        KC.LSFT,  KC.Z,     KC.X,    KC.C,    KC.V,     KC.B,     _______,  _______,  KC.N,      KC.M,     KC.COMM,  KC.DOT,  KC.SLSH,  KC.RSFT,
-        _______,  KC.CAPS, _______,  KC.LALT, KC.LGUI,  KC.SPC,   _______,  _______,  KC.ENT,   KC.BKDL,  KC.LEFT,  KC.UP,   KC.DOWN, KC.RGHT,
+        esc_td,   KC.N1,    KC.N2,   KC.N3,   KC.N4,    KC.N5,    KC.MINS,   KC.EQL,   KC.N6,    KC.N7,    KC.N8,    KC.N9,   KC.N0,   KC.BKDL,
+        KC.TAB,   KC.Q,     KC.W,    KC.E,    KC.R,     KC.T,     KC.LBRC,   KC.RBRC,  KC.Y,     KC.U,     KC.I,     KC.O,    KC.P,    KC.BSLS,
+        KC.LCTRL, KC.A,     KC.S,    KC.D,    KC.F,     KC.G,     _______,   _______,  KC.H,     KC.J,     KC.K,     KC.L,    KC.SCLN, KC.QUOT,
+        KC.LSFT,  KC.Z,     KC.X,    KC.C,    KC.V,     KC.B,     KC.MO(1),  _______,  KC.N,     KC.M,     KC.COMM,  KC.DOT,  KC.SLSH, KC.RSFT,
+        _______,  KC.CAPS,  _______, KC.LALT, KC.LGUI,  KC.SPC,   KC.MO(1),  KC.BKDL,  KC.SPC,   KC.ENT,   KC.LEFT,  KC.UP,   KC.DOWN, KC.RGHT,
+    ],
+    [
+        # 0         1         2        3         4       5         6          7        8          9         10       11       12        13
+        _______,   KC.N1,    KC.N2,   KC.N3,   KC.N4,    KC.N5,   _______,   _______,  KC.N6,    KC.N7,    KC.N8,    KC.N9,   KC.N0,   KC.BKDL,
+        _______,  _______,  _______,  _______, _______,  _______, _______,   _______,  _______,  _______,  KC.MINS,  KC.EQL, _______, _______,
+        _______,  _______,  _______,  _______, _______,  _______, _______,   _______,  _______,  _______,  KC.LBRC,  KC.RBRC,  _______, _______,
+        _______,  _______,  _______,  _______, _______,  _______, _______,   _______,  _______,  _______,  _______,  _______, _______, _______,
+        _______,  _______,  _______,  _______, _______,  _______, _______,   _______,  _______,  _______,  _______,  _______, _______, _______,
+
     ]
 ]
 
@@ -72,7 +93,7 @@ class Ergodash(_KMKKeyboard):
             self.col_pins = Pinconfig.RIGHT_COL_PINS
             self.row_pins = Pinconfig.RIGHT_ROW_PINS
 
-        self.modules.append(tapdance)
+        self.modules.extend(extra_modules)
         self.is_host = self.split_side == SplitSide.RIGHT
         self._init_split_module()
         self.log(f"Ergodox Init: {self.split_side}")
