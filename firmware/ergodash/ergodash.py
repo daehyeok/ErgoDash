@@ -3,6 +3,7 @@
 import board
 import digitalio
 import storage
+import neopixel
 
 from kmk.kmk_keyboard import KMKKeyboard as _KMKKeyboard
 from kmk.scanners import DiodeOrientation
@@ -37,10 +38,10 @@ esc_td = KC.TD(
 Keymap = [
     [
         # 0         1         2        3         4       5         6          7        8          9         10       11       12        13
-        esc_td,   KC.N1,    KC.N2,   KC.N3,   KC.N4,    KC.N5,    KC.MINS,   KC.EQL,   KC.N6,    KC.N7,    KC.N8,    KC.N9,   KC.N0,   KC.BKDL,
+        KC.GRV,   KC.N1,    KC.N2,   KC.N3,   KC.N4,    KC.N5,    KC.MINS,   KC.EQL,   KC.N6,    KC.N7,    KC.N8,    KC.N9,   KC.N0,   KC.BKDL,
         KC.TAB,   KC.Q,     KC.W,    KC.E,    KC.R,     KC.T,     KC.LBRC,   KC.RBRC,  KC.Y,     KC.U,     KC.I,     KC.O,    KC.P,    KC.BSLS,
         KC.LCTRL, KC.A,     KC.S,    KC.D,    KC.F,     KC.G,     _______,   _______,  KC.H,     KC.J,     KC.K,     KC.L,    KC.SCLN, KC.QUOT,
-        KC.LSFT,  KC.Z,     KC.X,    KC.C,    KC.V,     KC.B,     KC.MO(1),  _______,  KC.N,     KC.M,     KC.COMM,  KC.DOT,  KC.SLSH, KC.RSFT,
+        KC.LSFT,  KC.Z,     KC.X,    KC.C,    KC.V,     KC.B,     KC.ESC,  _______,  KC.N,     KC.M,     KC.COMM,  KC.DOT,  KC.SLSH, KC.RSFT,
         _______,  KC.CAPS,  _______, KC.LALT, KC.LGUI,  KC.SPC,   KC.MO(1),  KC.BKDL,  KC.SPC,   KC.ENT,   KC.LEFT,  KC.UP,   KC.DOWN, KC.RGHT,
     ],
     [
@@ -63,6 +64,11 @@ def _usb_mounted():
         return True
     return False
 
+def IsRight():
+    handress_pin = digitalio.DigitalInOut(board.GP27)
+    value = handress_pin.value
+    handress_pin.deinit()
+
 class Ergodash(_KMKKeyboard):
 
     split_side = SplitSide.LEFT
@@ -73,7 +79,8 @@ class Ergodash(_KMKKeyboard):
 
     _tx_pin=board.GP0
     _rx_pin=board.GP1
-    _handress_pin= digitalio.DigitalInOut(board.GP5)
+    _handress_pin= digitalio.DigitalInOut(board.GP27)
+    _pixel_pin = board.GP17
 
     def log(self,*argv):
         """print message to serial consol."""
@@ -84,7 +91,7 @@ class Ergodash(_KMKKeyboard):
         if split_side is not None:
             self.split_side = split_side
         else:
-            self.split_side = SplitSide.LEFT if self._handress_pin.value else SplitSide.RIGHT
+            self.split_side = SplitSide.RIGHT if self._handress_pin.value else SplitSide.LEFT
 
         if(self.split_side == SplitSide.LEFT):
             self.col_pins = Pinconfig.LEFT_COL_PINS
@@ -92,6 +99,8 @@ class Ergodash(_KMKKeyboard):
         else:
             self.col_pins = Pinconfig.RIGHT_COL_PINS
             self.row_pins = Pinconfig.RIGHT_ROW_PINS
+
+        self.pixel = neopixel.NeoPixel(self._pixel_pin, 1, brightness=0.3)
 
         self.modules.extend(extra_modules)
         self.is_host = self.split_side == SplitSide.RIGHT
