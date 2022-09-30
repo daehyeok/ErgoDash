@@ -1,13 +1,18 @@
 include <BOSL2/std.scad>
-
 include <BOSL2/fnliterals.scad>
+
+include <key_position.scad>
 $fn=100;
 
-plate_thick=3;
+plate_thick=1.5;
 _middle_bottom_thick=5;
 _middle_top_thick=5;
 middle_thick= 9;
-bottom_thick=3;
+bottom_floor_thick=3;
+bottom_pcb_depth=10.5;
+bottom_plate_depth=3;
+bottom_thick=bottom_floor_thick+bottom_pcb_depth+bottom_plate_depth;
+top_plate_depth=plate_thick+0.1;
 top_wall_thick=3;
 top_thick=3;
 
@@ -18,85 +23,23 @@ m2dot5_outer=3.70 + m2dot_margin;
 m2_drill=2;
 m2_heil_coil_drill=2.1;
 
-key_positions =[
-    //x,y,degree, size
-     [0.0, -0.0, 0.0, 1],
-     [0.0, 19.05, 0.0, 1],
-     [0.0, 38.1, 0.0, 1],
-     [0.0, 57.15, 0.0, 1],
-     [0.0, 76.2, 0.0, 1],
-     [19.05, -0.0, 0.0, 1],
-     [19.05, 19.05, 0.0, 1],
-     [19.05, 38.1, 0.0, 1],
-     [19.05, 57.15, 0.0, 1],
-     [19.05, 76.2, 0.0, 1],
-     [38.1, 4.7625, 0.0, 1],
-     [38.1, 23.8125, 0.0, 1],
-     [38.1, 42.8625, 0.0, 1],
-     [38.1, 61.9125, 0.0, 1],
-     [38.1, 80.9625, 0.0, 1],
-     [57.15, 26.19375, 0.0, 1],
-     [57.15, 45.24375, 0.0, 1],
-     [57.15, 64.29375, 0.0, 1],
-     [57.15, 83.34375, 0.0, 1],
-     [60.96, 4.7625, 0.0, 1],
-     [76.2, 23.8125, 0.0, 1],
-     [76.2, 42.8625, 0.0, 1],
-     [76.2, 61.9125, 0.0, 1],
-     [76.2, 80.9625, 0.0, 1],
-     [87.297, 0.00025, -30.0, 1],
-     [95.25, 21.43125, 0.0, 1],
-     [95.25, 40.48125, 0.0, 1],
-     [95.25, 59.53125, 0.0, 1],
-     [95.25, 78.58125, 0.0, 1],
-     [103.795, -9.5248, -30.0, 1],
-     [113.32, 6.9732, -30.0, 1],
-     [114.3, 30.95625, 0.0, 1],
-     [114.3, 50.00625, 0.0, 1],
-     [114.3, 69.05625, 0.0, 1],
-     [125.0555, -10.8008, -120.0, 2],];
-
-module switches(w=19.05,h=19.05, scaling=false, height = 10){
-    for(key = key_positions){
-        size = [w,h, height];
-        if (scaling == true){
-            size = [w,h, height] * [key[3],1,1];
-        }
-        translate([key[0], key[1]])
-        square([w*key[3],h, height], spin=key[2], center=true);
-    }
+//mount holes for bottom, 
+module plateMounts(r=1){
+    positions =[
+        [19.05/2,19.05*4.5],
+        [19.05 * 5.5,19.05*4.5],
+    ];
+    color([1,0,0])
+   for(pos = positions)
+        translate(pos)
+         circle(r);
 }
 
-module pcbHoles(r=2.5, height = 10){
- positions = [[47.705, 54.4155],
-                [86.565, 69.4055],
-                [98.806, 9.4615],
-                [9.525, 66.6115],
-                [9.525, 9.2075],
-                [48.133, 16.8275]];
-                for (pos = positions) 
-                        translate(pos)
-                            circle(r);
-}
-
-module pcbOutline(){
-     import (file = "ergodash-Edge_Cuts.dxf");
-}
-
-module pcb(thick=1.6, stack_height=0){
-    up(stack_height)
-    color("green")
-    difference(){
-        linear_extrude(height = thick)
-        pcbOutline();
-        pcbHoles();
-    }
-}
 
 //mount holes for bottom, 
-module plateMounts(r=3){
+module magnetMounts(r=3){
     positions =[
-        [-11.5,-9.5],
+        [19.05,-9.5],
         [-11.5, 48.25-9.5],
         [-11.5, 87],
         [34.0, -8.5],
@@ -115,177 +58,74 @@ module plateMounts(r=3){
          circle(r);
 }
 
-module baseOutline(scale=1){
-    delta= [-outline_size[0]/2 + 9.756,
-    outline_size[1]/2 -197.903/2 ];
-    translate(-delta) 
-    scale(scale)
-    translate(delta) //move to center
-    import (file = "outline.dxf");
-    //152.393,130.852
-}
-
-module caseOutline(){
-    baseOutline(1.065);
-}
-
-
-module plateCutout(u=1){
-    paths = [[0, 14],
- [7, 14],
- [7, 9.300],
- [8.525, 9.300],
- [8.525, 12.530],
- [15.275, 12.530],
- [15.275, 9.300],
- [16.100, 9.300],
- [16.100, 6.515],
- [15.275, 6.515],
- [15.275, 0.230],
- [13.550, 0.230],
- [13.550, -0.970],
- [10.250, -0.970],
- [10.250, 0.230],
- [8.525, 0.230],
- [8.525, 4.700],
- [7, 4.700],
- [7, 0],
- [0, 0],
- [0, 14]];
- 
- if(u==2){
-     union(){
-     fwd(7)
-     polygon(paths);
-     fwd(7)
-     xflip()
-      polygon(paths);
-     }
- }else{
-     rect(14);
- }
-}
-
-module plateOutline(include_hole=false){
-   module keyHoles(){
-       for(key = key_positions){
-        translate([key[0], key[1]])
-        zrot(key[2])
-        plateCutout(key[3]);
-    }
-   }
-   
-   difference(){
-   caseOutline();
-  
-   if(include_hole ==true){
-    union(){
-        keyHoles();
-       plateMounts(m2_drill/2);
-      }
-   }
-   };
-}
-
-
 module plate(thick=plate_thick, 
             stack_height=0){
     up(stack_height)
-    linear_extrude(height = thick)
-    plateOutline(include_hole=true);
-}
-
-module bottomOutline(){
-       difference(){
-        caseOutline();
-        plateMounts(m2_heil_coil_drill/2);
-    };
-};
-
-module bottom(thick=bottom_thick){
-    color("purple")
-    linear_extrude(height = thick)
-    bottomOutline();
-}
-
-
-module trrsCutter(thick=middle_thick, stack_height=0){
-    up(stack_height)
-    linear_extrude(height = thick)
-    trrsCutterOutline();
-}
-
-module trrsCutterOutline(){
-    back(87)
-    right(105)
-    square([25,14], true);
-}
-
-module middleOutline(){
-       difference(){
-        caseOutline();
-           scale(1.01)
-        pcbOutline();  //TODO: add margin for pcb
-        plateMounts(m2_heil_coil_drill/2);
-        trrsCutterOutline();
-    };
-};
-
-module middle(thick=middle_thick, stack_height=0){
-    up(stack_height)
-    color("red")
-    linear_extrude(height = thick)
-    middleOutline();
-}
-
-module topWall(thick=top_wall_thick, stack_height=0){
-    up(stack_height)
-     color("green")
+    color("LightGray")
     linear_extrude(height = thick)
     difference(){
-        caseOutline();
-        plateOutline();  //TODO: add margin for plate
-    };
+        plateOutline(include_hole=true);
+        plateHoles();
+        pcbHoles(r=1.05);
+        plateMounts(r=2); //mark
+    }
 }
 
-module topCase(thick=top_thick, stack_height=0){
 
-    module switch_cutter(){
-        addiction_pos = [
-        [57.15, 20.3125],
-        [76.2, 4.7625],
-        [114.3, 20.3],
-        [95.25,4.7625],
-        ];
-        union(){
-        switches(19.1, 19.1);
-        for (pos = addiction_pos)
-         translate(pos)
-          square([19.1, 19.1], center=true);
-        };
+module top(thick=top_thick, 
+            stack_height=0){
+    up(bottom_thick)
+  union(){
+      color("red")
+    linear_extrude(height = top_plate_depth )
+    difference()
+    {
+    
+        caseOutline();
+        plateOutline();
+    
     }
     
-    up(stack_height)
-    color("white")
-    linear_extrude(height = thick)
-    difference(){
-     caseOutline();
-      pcbHoles(r=1.1);
-        switch_cutter();
-   }
+   up(top_plate_depth)
+   linear_extrude(height = top_thick - top_plate_depth )
+   difference()
+    {
+        caseOutline();
+        keyOutline();
+    }
+    
+    
+}
+}
+
+module bottom(thick=bottom_thick, 
+            stack_height=0){
+     up(stack_height-bottom_pcb_depth-bottom_floor_thick)
+   
+    union()
+    {
+        color("Burlywood")
+        linear_extrude(height = bottom_floor_thick)
+        caseOutline();
+        
+       color("Wheat")
+        up(bottom_floor_thick)
+        linear_extrude(height = bottom_pcb_depth)
+        difference(){
+            caseOutline();
+            pcbOutline();
+        }
+        /*
+        color("Burlywood")
+        up(bottom_floor_thick+bottom_pcb_depth)
+        linear_extrude(height = bottom_plate_depth)
+        difference(){
+            caseOutline();
+            plateOutline();
+        }*/
+    }
 }
 
 
-
-module Rendering(){
-  //  topCase(stack_height=bottom_thick + middle_thick + top_wall_thick);
-   // topWall(stack_height=bottom_thick +middle_thick);
-  // plate(stack_height=bottom_thick+middle_thick);
-
-    pcb(stack_height=bottom_thick+middle_thick-5);
-    trrsCutter(stack_height=bottom_thick);
-    middle(stack_height=bottom_thick);
-    bottom(bottom_thick);
-}
-//Rendering();
-plateOutline(true);
+bottom();
+pcb();
