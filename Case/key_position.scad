@@ -134,3 +134,11 @@ module keyOutline(){
  import (file = "outlines/key.dxf");
 }
 
+module prevCaseOutline(){
+    delta= [-outline_size[0]/2 + 9.756,
+    outline_size[1]/2 -197.903/2 ];
+    translate(-delta) 
+    scale(1.065)
+    translate(delta) //move to center
+    import (file = "outline.dxf");
+}

@@ -23,11 +23,15 @@ m2dot5_outer=3.70 + m2dot_margin;
 m2_drill=2;
 m2_heil_coil_drill=2.1;
 
-//mount holes for bottom, 
-module plateMounts(r=1){
+//mount holes for top, 
+module topMounts(r=1.5){
     positions =[
-        [19.05/2,19.05*4.5],
-        [19.05 * 5.5,19.05*4.5],
+        [19.05/2+10,19.05*4.5+4],
+        [19.05 * 5.5 + 8,19.05*4.5],
+        [35, -8],
+        [70, -8],
+        [130, 13],
+    
     ];
     color([1,0,0])
    for(pos = positions)
@@ -35,9 +39,35 @@ module plateMounts(r=1){
          circle(r);
 }
 
+//mount holes for top, 
+module plateMounts(r=0.5){
+    positions =[
+        [19.05/2+10,19.05*4.5+4],
+        [19.05 * 5.5 + 8,19.05*4.5],
+        [35, -8],
+        [70, -8],
+        [130, 13],
+    
+    ];
+    color([1,0,0])
+   for(pos = positions)
+        translate(pos)
+         circle(r);
+}
+
+module rectmagnet(){
+    //20x4x1
+        positions =[
+        [19.05 * 2.5,19.05*4.5+8],
+        [19.05 * 2.5,-8.5],
+    ];
+   for(pos = positions)
+        translate(pos)
+        square([20,4]);
+}
 
 //mount holes for bottom, 
-module magnetMounts(r=3){
+module magnetMounts(r=1){
     positions =[
         [19.05,-9.5],
         [-11.5, 48.25-9.5],
@@ -126,6 +156,4 @@ module bottom(thick=bottom_thick,
     }
 }
 
-
 bottom();
-pcb();
